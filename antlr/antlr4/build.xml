@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+Make build.properties like this:
+
+version=4.0ea
+
+antlr3.jar=/usr/local/lib/antlr-3.4-complete.jar
+build.sysclasspath=ignore
+-->
+
+<project name="ANTLR4" default="distribute" basedir=".">
+
+    <property file="build.properties" />
+
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="dist.dir" value="${basedir}/dist" />
+    <property name="build.dir" value="${basedir}/build" />
+    <property name="lib.dir" value="${basedir}/lib" />
+    <property name="install.root.dir" value="${dist.dir}/antlr-${version}" />
+    <property name="jar.file" value="${dist.dir}/antlr-${version}-complete.jar" />
+
+	<path id="classpath">
+        <pathelement location="${antlr3.jar}"/> <!-- general setup -->
+		<pathelement location="${ant-antlr3.jar}"/>
+		<pathelement location="${basedir}/runtime/Java/lib/org.abego.treelayout.core.jar"/>
+	</path>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+    <target name="init">
+        <!-- Create the build directory structure used by compile -->
+        <mkdir dir="${build.dir}/gen/org/antlr/v4" />
+    </target>
+
+
+
+	<target name="antlr" depends="init">
+		<echo>parse grammars</echo>
+		<java classname="org.antlr.Tool" fork="true" failonerror="false" maxmemory="300m"
+			dir="${basedir}/tool/src/org/antlr/v4/parse">
+			<arg value="-make"/>
+			<arg value="ANTLRParser.g"/>
+			<arg value="ANTLRLexer.g"/>
+			<arg value="ActionSplitter.g"/>
+			<arg value="ATNBuilder.g"/>
+			<arg value="BlockSetTransformer.g"/>
+			<arg value="GrammarTreeVisitor.g"/>
+			<arg value="LeftRecursiveRuleWalker.g"/>
+			<classpath>
+				<pathelement location="${antlr3.jar}"/>
+				<pathelement path="${java.class.path}"/>
+			</classpath>
+		</java>
+
+<!--
+		<echo>semantics grammars</echo>
+		<java classname="org.antlr.Tool" fork="true" failonerror="false" maxmemory="300m"
+			dir="${basedir}/tool/src/org/antlr/v4/semantics">
+			<arg value="-make"/>
+			<arg value="-lib"/>
+			<arg value="../parse"/>
+			<arg value="BasicSemanticTriggers.g"/>
+			<arg value="CollectSymbols.g"/>
+			<arg value="Refs.g"/>
+			<classpath>
+				<pathelement location="${antlr3.jar}"/>
+				<pathelement path="${java.class.path}"/>
+			</classpath>
+		</java>
+		-->
+
+		<echo>codegen grammars</echo>
+		<java classname="org.antlr.Tool" fork="true" failonerror="false" maxmemory="300m"
+			dir="${basedir}/tool/src/org/antlr/v4/codegen">
+			<arg value="-make"/>
+			<arg value="-lib"/>
+			<arg value="../parse"/>
+			<arg value="SourceGenTriggers.g"/>
+			<classpath>
+				<pathelement location="${antlr3.jar}"/>
+				<pathelement path="${java.class.path}"/>
+			</classpath>
+		</java>
+
+		<!--
+		<echo>gunit grammars</echo>
+		<java classname="org.antlr.Tool" fork="true" failonerror="false" maxmemory="300m"
+			dir="${basedir}/gunit/src/org/antlr/v4/gunit">
+			<arg value="-make"/>
+			<arg value="ASTVerifier.g"/>
+			<arg value="gUnit.g"/>
+			<arg value="jUnitGen.g"/>
+			<arg value="Semantics.g"/>
+			<classpath>
+				<pathelement location="${antlr3.jar}"/>
+				<pathelement path="${java.class.path}"/>
+			</classpath>
+		</java>
+		-->
+	</target>
+
+    <target name="compile" depends="antlr" description="Compile for generic OS">
+        <mkdir dir="${build.dir}/classes"/>
+        <mkdir dir="${build.dir}/src"/>
+		<copy todir="${build.dir}/src" >
+			<fileset dir="${basedir}/tool/src/"/>
+			<fileset dir="${basedir}/runtime/Java/src/"/>
+			<!-- <fileset dir="${basedir}/gunit/src/"/> -->
+		</copy>
+		<replace dir="${build.dir}/src" token="@version@" value="${version}"/>
+        <javac
+                destdir="${build.dir}/classes"
+                source="1.5"
+                target="1.5"
+                debug="true"
+                excludes="org/antlr/v4/test/**">
+			<classpath refid="classpath"/>
+            <src path="${build.dir}/src:${build.dir}/gen"/>
+        </javac>
+    </target>
+
+    <target name="build-jar" depends="compile" description="Build ANTLR 4.jar">
+        <mkdir dir="${dist.dir}"/>
+
+        <jar jarfile="${jar.file}">
+            <fileset dir="${build.dir}/classes" includes="**/*.class"/>
+	    <fileset dir="${basedir}/tool/resources">
+		    <include name="**/*.st"/>
+		    <include name="**/*.stg"/>
+	    </fileset>
+            <zipfileset includes="org/antlr/**, org/antlr/stringtemplate/**, org/stringtemplate/v4/**" src="${antlr3.jar}"/>
+            <zipfileset includes="**/*.class" src="${basedir}/runtime/Java/lib/org.abego.treelayout.core.jar"/>
+            <manifest>
+                <attribute name="Version" value="${version}"/>
+                <attribute name="Main-Class" value="org.antlr.v4.Tool"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="zip-source" depends="compile">
+        <mkdir dir="${install.root.dir}"/>
+
+        <mkdir dir="${install.root.dir}/src"/>
+        <copy todir="${install.root.dir}/src">
+			<fileset dir="${basedir}/tool/src/">
+				<include name="**/*.java"/>
+				<include name="**/*.g"/>
+				<include name="**/*.st"/>
+				<include name="**/*.stg"/>
+			</fileset>
+			<fileset dir="${basedir}/tool/resources/">
+				<include name="**/*.st"/>
+				<include name="**/*.stg"/>
+			</fileset>
+			<fileset dir="${basedir}/runtime/Java/src/">
+				<include name="**/*.java"/>
+				<include name="**/*.g"/>
+				<include name="**/*.st"/>
+				<include name="**/*.stg"/>
+			</fileset>
+			<!--
+			<fileset dir="${basedir}/gunit/src/">
+				<include name="**/*.java"/>
+				<include name="**/*.g"/>
+				<include name="**/*.st"/>
+				<include name="**/*.stg"/>
+			</fileset>
+			-->
+        </copy>
+
+        <copy todir="${install.root.dir}">
+            <fileset dir=".">
+                <include name="build.properties"/>
+                <include name="build.xml"/>
+                <include name="LICENSE.txt"/>
+                <include name="README.txt"/>
+                <include name="doxyfile"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${install.root.dir}/lib" file="${antlr3.jar}">
+        </copy>
+
+        <zip destfile="${dist.dir}/antlr-${version}-src.zip">
+            <zipfileset dir="${install.root.dir}" prefix="antlr-${version}"/>
+        </zip>
+    </target>
+
+    <target name="distribute" depends="clean, zip-source, build-jar">
+    </target>
+    
+    <!-- 
+    # added by miho
+    
+    We add a jar target to allow netbeans to build this project. We deploy
+    it after we created the jar.
+    -->
+    
+    <target name="jar" depends="clean, zip-source, build-jar">
+        <copy todir="../deploy" file="${dist.dir}/antlr-${version}-complete.jar">
+        </copy>
+        <copy todir="../deploy" file="${dist.dir}/antlr-${version}-src.zip">
+        </copy>
+    </target>
+
+</project>
