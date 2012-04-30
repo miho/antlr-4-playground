@@ -6,6 +6,7 @@ ANTLR-v4 Playground
 - It contains a NetBeans Project for *ANTLR v4* and experimental applications.
 
 > **NOTE**
+>
 > I _HATE_ Maven like dependencies. They never work. There is always a missing library.
 > That is why ANTLR sources and binary build dependencies are included.
 
@@ -13,4 +14,4 @@ ANTLR-v4 Playground
 
 Open the `antlr-4` project in NetBeans and build the project.
 The final ANTLR library can be found in the `deploy` folder.
-Now open one of the NetBeans projects that are located in the experiments folder and run it
+Now open one of the NetBeans projects that are located in the experiments folder and run it.
