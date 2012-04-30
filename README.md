@@ -6,7 +6,7 @@ ANTLR-v4 Playground
 - It contains a NetBeans Project for *ANTLR v4* and experimental applications.
 
 > **NOTE**
-> I __HATE__ Maven like dependencies. They never work. There is always a missing library.
+> I _HATE_ Maven like dependencies. They never work. There is always a missing library.
 > That is why ANTLR sources and binary build dependencies are included.
 
 ## Compile
