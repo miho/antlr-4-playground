@@ -1,5 +1,5 @@
-antlr-4-playground
-==================
+ANTLR-v4 Playground
+===================
 
 - Playground for upcoming ANTLR 4 version
 
@@ -11,5 +11,6 @@ antlr-4-playground
 
 ## Compile
 
-Open the `antlr-4` project in NetBeans and build the project. The final ANTLR library can be found in the `deploy` folder.
+Open the `antlr-4` project in NetBeans and build the project.
+The final ANTLR library can be found in the `deploy` folder.
 Now open one of the NetBeans projects that are located in the experiments folder and run it
