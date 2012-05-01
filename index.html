@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Antlr-4-playground : Playground for upcoming ANTLR 4 version" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Antlr-4-playground</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/miho/antlr-4-playground">View on GitHub</a>
+
+          <h1 id="project_title">Antlr-4-playground</h1>
+          <h2 id="project_tagline">Playground for upcoming ANTLR 4 version</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/miho/antlr-4-playground/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/miho/antlr-4-playground/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>ANTLR-v4 Playground</h1>
+
+<h2>Disclaimer</h2>
+
+<p>I am not an expert in the area of language processing. Everything written below is just my humble opinion.
+If you think I am wrong <em>please</em> correct me! I share my thoughts in the hope they will be useful for someone. </p>
+
+<h2>Motivation</h2>
+
+<p>Since a while I am evaluating several parser generators for small and mid-size projects. I have tried <a href="http://www.antlr.org/wiki/display/ANTLR3/ANTLR+3+Wiki+Home">ANTLR v3</a> and some other alternatives. I even tried some PEG libraries such as <a href="https://github.com/sirthias/parboiled/wiki">parboiled</a>. That's
+why I created this playground project which contains small example applications that make use of 
+ANTLR v4.</p>
+
+<h2>Options</h2>
+
+<h3>ANTLR v3:</h3>
+
+<p>ANTLR developers made several design decisions that kept me from using ANTLR. What I really dislike is the fact that one has to mix different languages in one file (the grammar file). There will never be an IDE or editor that provides good support for that. However, good IDE support highly increases productivity. Even though ANTLR supports different target languages such as C it is not easy to reuse one grammar for different target languages. Another problem is the fact that even for relatively simple applications it is necessary to mess around with tree creation etc. For small applications such as mine it was no fun at all!</p>
+
+<h3>parboiled</h3>
+
+<p>First of all, I really like <a href="https://github.com/sirthias/parboiled/wiki">parboiled</a> for its simplicity. It is possible to directly use Java or Scala to define the grammar. This is really clever. Doing that you can always claim to have good IDE support. What I don't like is that with PEG grammars rule orders and spaces do matter a lot! This is a huge disadvantage.</p>
+
+<h3>ANTLR v4</h3>
+
+<p>I almost decided to use <em>parboiled</em> instead of <em>ANTLR v3</em>. But when I tried <em>ANTLR v4</em> I was really impressed how simple it is. It seems like the developers have totally changed their mind regarding what matters most. <em>Great!</em> Grammar and code are strictly separated from each other. In addition to the automatically generated parser it is possible to use <em>visitors</em> to walk through the parse tree.</p>
+
+<blockquote>
+<p>Which tree? Yes, you guessed right. The tree is automatically generated!</p>
+</blockquote>
+
+<p>As it is possible to create labels in the grammar file the visitors automatically get the right methods.
+This is a nice way to integrate the grammar into the target language. </p>
+
+<blockquote>
+<p><strong>AUTOMATIC</strong> . How often did I use this word in the last section? <em>ANTLR v4</em> seems to be all about automation and
+ simplicity. Great!</p>
+</blockquote>
+
+<h3>Summary</h3>
+
+<p>Finally, <em>ANTLR v4</em> seems to be the way to go. The <a href="https://github.com/miho/antlr-4-playground/tree/master/experiments/expr">expr</a> project demonstrates how easy it is to write an expression evaluator.</p>
+
+<h2>Project Details</h2>
+
+<ul>
+<li><p>Playground for upcoming ANTLR 4 version</p></li>
+<li><p>It contains a NetBeans Project for <em>ANTLR v4</em> and experimental applications.</p></li>
+</ul><blockquote>
+<p><strong>NOTE</strong></p>
+
+<p>I <em>HATE</em> Maven like dependencies. They never work. There is always a missing library.
+That is why ANTLR sources and binary build dependencies are included.</p>
+</blockquote>
+
+<h2>Compile</h2>
+
+<p>Open the <code>antlr-4</code> project in NetBeans (location: <code>antlr/antlr-4</code>) and build the project.
+The final ANTLR library can be found in the <code>antlr/deploy</code> folder.</p>
+
+<h2>Try Experimental Applications</h2>
+
+<p>Open one of the NetBeans projects that are located in the <code>antlr/experiments</code> folder and run it.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Antlr-4-playground maintained by <a href="https://github.com/miho">miho</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
